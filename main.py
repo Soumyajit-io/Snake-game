@@ -32,6 +32,7 @@ def game_loop():
     snake_y = 55
     velocity_x =0
     velocity_y =0
+    velocity_dir ="r"
     speed = 2
     snake_size = 12
     # food
@@ -69,18 +70,52 @@ def game_loop():
                     running = False
                 # movement
                 keys = pygame.key.get_pressed()
+                if keys[pygame.K_SPACE]:
+                    if velocity_dir=='u':
+                        velocity_y =-2*speed
+                        velocity_x =0
+                    if velocity_dir=='d':
+                        velocity_y =2*speed
+                        velocity_x =0
+                    if velocity_dir=='l':
+                        velocity_y =0
+                        velocity_x =-2*speed
+                    if velocity_dir=='r':
+                        velocity_y =0
+                        velocity_x =2*speed
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_SPACE:
+                        if velocity_dir=='u':
+                            velocity_y =-speed
+                            velocity_x =0
+                        if velocity_dir=='d':
+                            velocity_y =speed
+                            velocity_x =0
+                        if velocity_dir=='l':
+                            velocity_y =0
+                            velocity_x =-speed
+                        if velocity_dir=='r':
+                            velocity_y =0
+                            velocity_x =speed
+                    
                 if keys[pygame.K_w]:
                     velocity_y =-speed
                     velocity_x =0
+                    velocity_dir='u'
                 if keys[pygame.K_s]:
                     velocity_y =speed
                     velocity_x =0
+                    velocity_dir='d'
                 if keys[pygame.K_a]:
                     velocity_y =0
                     velocity_x =-speed
+                    velocity_dir='l'
                 if keys[pygame.K_d]:
                     velocity_y =0
                     velocity_x =speed
+                    velocity_dir='r'
+                
+
             snake_x+=velocity_x    
             snake_y+=velocity_y 
 
