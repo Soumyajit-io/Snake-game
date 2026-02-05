@@ -58,7 +58,7 @@ def game_loop():
                     pygame.quit()
                     running = False
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
+                if event.key == pygame.K_SPACE:
                     game_over=False
                     game_loop()
         else:
@@ -135,8 +135,6 @@ def game_loop():
 
             if snake_x< 0 or snake_x > screen_width or snake_y<0 or snake_y>screen_height :
                 game_over =True
-
-
 
             plot_snake(screen,black,snk_list,snake_size)
             
