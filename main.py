@@ -70,6 +70,7 @@ def game_loop():
                     running = False
                 # movement
                 keys = pygame.key.get_pressed()
+                # sprint
                 if keys[pygame.K_SPACE]:
                     if velocity_dir=='u':
                         velocity_y =-2*speed
@@ -97,23 +98,35 @@ def game_loop():
                         if velocity_dir=='r':
                             velocity_y =0
                             velocity_x =speed
-                    
+                # normal
                 if keys[pygame.K_w]:
-                    velocity_y =-speed
-                    velocity_x =0
-                    velocity_dir='u'
+                    if velocity_dir =='d':
+                        pass
+                    else:
+                        velocity_y =-speed
+                        velocity_x =0
+                        velocity_dir='u'
                 if keys[pygame.K_s]:
-                    velocity_y =speed
-                    velocity_x =0
-                    velocity_dir='d'
+                    if velocity_dir =='u':
+                        pass
+                    else:
+                        velocity_y =speed
+                        velocity_x =0
+                        velocity_dir='d'
                 if keys[pygame.K_a]:
-                    velocity_y =0
-                    velocity_x =-speed
-                    velocity_dir='l'
+                    if velocity_dir =='r':
+                        pass
+                    else:
+                        velocity_y =0
+                        velocity_x =-speed
+                        velocity_dir='l'
                 if keys[pygame.K_d]:
-                    velocity_y =0
-                    velocity_x =speed
-                    velocity_dir='r'
+                    if velocity_dir =='l':
+                        pass
+                    else:
+                        velocity_y =0
+                        velocity_x =speed
+                        velocity_dir='r'
                 
 
             snake_x+=velocity_x    
