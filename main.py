@@ -1,5 +1,7 @@
 import pygame
 import random
+import agent
+import voice
 from agent import snkagent
 import threading
 
@@ -8,8 +10,56 @@ screen_width = 900
 screen_height = 600
 screen = pygame.display.set_mode((screen_width,screen_height))
 pygame.display.set_caption("Snake game")
-t2 = threading.Thread(target=snkagent, args=(("Introduce yourself " ,10,0,(45,55),(100,200))))
+
+# utility functions
+def text(text,color,size,x,y):
+    font = pygame.font.SysFont(None,size)
+    txt = font.render(text,True,color)
+    screen.blit(txt,[x,y])
+# def caption_text(text,color,size):
+#     font = pygame.font.SysFont("Roboto",size)
+#     txt = font.render(text,True,color)
+#     txt_rect = txt.get_rect()
+#     txt_rect.centerx = screen_width // 2
+#     txt_rect.bottom = screen_height - 18
+#     screen.blit(txt,txt_rect)
+def caption_text(text, color, size):
+    if not text:
+        return
+
+    font = pygame.font.SysFont("Roboto", size)
+
+    words = text.split()
+
+    # If short, draw single line
+    if len(words) <= 10:
+        rendered = font.render(text, True, color)
+        rect = rendered.get_rect(center=(screen_width // 2, screen_height - 30))
+        screen.blit(rendered, rect)
+        return
+
+    # Split into two lines
+    mid = len(words) // 2
+    line1 = " ".join(words[:mid])
+    line2 = " ".join(words[mid:])
+
+    rendered1 = font.render(line1, True, color)
+    rendered2 = font.render(line2, True, color)
+
+    rect1 = rendered1.get_rect(center=(screen_width // 2, screen_height - 50))
+    rect2 = rendered2.get_rect(center=(screen_width // 2, screen_height - 25))
+
+    screen.blit(rendered1, rect1)
+    screen.blit(rendered2, rect2)
+
+def plot_snake(screen,black,snake_list,snake_size):
+    for x , y in snake_list:
+        pygame.draw.rect(screen,black,[x,y,snake_size,snake_size])
+
+t2 = threading.Thread(target=snkagent, args=(("Introduce yourself" ,10,0,(45,55),(100,200))))
+t3 = threading.Thread(target=voice.start_voice, args=(()),daemon=True)
 t2.start()
+t3.start()
 
 # sounds
 # load bg music
@@ -29,14 +79,7 @@ bg = (50, 205, 50)
 red = (255,0,0)
 black = (0,0,0)
 
-# utility functions
-def text(text,color,size,x,y):
-    font = pygame.font.SysFont(None,size)
-    txt = font.render(text,True,color)
-    screen.blit(txt,[x,y])
-def plot_snake(screen,black,snake_list,snake_size):
-    for x , y in snake_list:
-        pygame.draw.rect(screen,black,[x,y,snake_size,snake_size])
+
 
 # game loop
 def game_loop():
@@ -73,7 +116,7 @@ def game_loop():
 
     while running:
         if game_over:
-            
+            voice.stop_voice()
             screen.fill("red")
             text("Game over! Press Enter to continue","black",60,100,270)
             pygame.display.update()
@@ -90,6 +133,7 @@ def game_loop():
         else:
             screen.fill(bg)
             # screen.blit(background,(0,0))
+            caption_text(agent.snake_caption,black,22)
             text(f"Score: {score}",black,40,20,20)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -102,42 +146,46 @@ def game_loop():
                     
                     if velocity_dir=='u':
                         hiss_effect.play()
-                        snake_ai("Snake started sprinting",10)
+                        # snake_ai("Snake started sprinting",7)
                         velocity_y =-2*speed
                         velocity_x =0
-                        snk_length = max(10,snk_length-1)
+                        # snk_length = max(10,snk_length-1)
                     if velocity_dir=='d':
                         hiss_effect.play()
-                        snake_ai("Snake started sprinting",10)
+                        # snake_ai("Snake started sprinting",7)
                         velocity_y =2*speed
                         velocity_x =0
-                        snk_length = max(10,snk_length-1)
+                        # snk_length = max(10,snk_length-1)
                     if velocity_dir=='l':
                         hiss_effect.play()
-                        snake_ai("Snake started sprinting",10)
+                        # snake_ai("Snake started sprinting",7)
                         velocity_y =0
                         velocity_x =-2*speed
-                        snk_length = max(10,snk_length-1)
+                        # snk_length = max(10,snk_length-1)
                     if velocity_dir=='r':
                         hiss_effect.play()
-                        snake_ai("Snake started sprinting",10)
+                        # snake_ai("Snake started sprinting",7)
                         velocity_y =0
                         velocity_x =2*speed
-                        snk_length = max(10,snk_length-1)
+                        # snk_length = max(10,snk_length-1)
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_SPACE:
                         if velocity_dir=='u':
                             velocity_y =-speed
                             velocity_x =0
+                            snake_ai("Snake started sprinting",2)
                         if velocity_dir=='d':
                             velocity_y =speed
                             velocity_x =0
+                            snake_ai("Snake started sprinting",2)
                         if velocity_dir=='l':
                             velocity_y =0
                             velocity_x =-speed
+                            snake_ai("Snake started sprinting",2)
                         if velocity_dir=='r':
                             velocity_y =0
                             velocity_x =speed
+                            snake_ai("Snake started sprinting",2)
                 # normal
                 if keys[pygame.K_w]:
                     if velocity_dir =='d':
@@ -171,9 +219,8 @@ def game_loop():
             # position increment
             snake_x+=velocity_x    
             snake_y+=velocity_y 
-            # len of snake
-            # print(len(snk_list))
-
+            if voice.listening :
+                text("Nada is listening","Black",25,745,20)
             # food collision
             if abs(snake_x-food_x)<11 and abs(snake_y-food_y)<11:
                 eating_effect.play()
@@ -181,14 +228,14 @@ def game_loop():
                 food_x=random.randint(20,880)
                 food_y=random.randint(20,580)
                 snk_length+=8
-                snake_ai(" Snake ate food",22)        
+                snake_ai(" Snake ate food",5)        
             # snake length increment
             snk_list.append([snake_x,snake_y])
             
             # snake length decrement
             if len(snk_list)>snk_length:
                 snk_list = snk_list[-snk_length:]
-
+        
             # snake collide itself condition
             if [snake_x,snake_y] in snk_list[:-1]:
                 game_over_effect.play()
