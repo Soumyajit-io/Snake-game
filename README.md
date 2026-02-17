@@ -1,30 +1,59 @@
-# 🐍 Snake Game (Pygame)
+# 🐍 LLM-Powered Snake Game (Pygame)
 
+An interactive Snake game built with **Python and Pygame**, enhanced with a locally running **LLM-powered voice agent**.
 
-
-A Snake game built using Python and Pygame, designed to practice core game development concepts such as game loops, movement mechanics, collision detection, and score handling.
-The project also features an LLM-powered talking snake that reacts to in-game events in real time.
+This project combines real-time game development with asynchronous AI integration, enabling a talking snake that reacts to in-game events and user voice commands in real time.
 
 ---
 
-## 🎮 Features
+## 🎮 Core Game Features
 
-- Smooth and responsive snake movement
-- Random food spawning
-- Snake grows after eating food
-- Collision detection with walls and itself
+- Smooth and responsive movement
+- Sprint mechanic with speed control
+- Randomized food spawning
+- Dynamic snake growth
+- Collision detection (self + boundary)
 - Real-time score tracking
-- Sprinting feature for faster movement
-- LLM-powered talking snake with contextual responses
-- Clean and beginner-friendly gameplay
+- Sound effects and background music
+- Clean UI with dynamic caption rendering
+
+---
+
+## 🤖 AI Agent Features
+
+- Locally running open-source LLM
+- Personality-driven character (Nada)
+- Context-aware responses to game events
+- Voice-based interaction with wake-word activation
+- Asynchronous microphone listening
+- Thread-safe LLM invocation
+- Real-time TTS voice output
+- Dynamic on-screen caption system
+
+---
+
+## 🧠 Architecture Highlights
+
+- Event-driven design
+- Separation of concerns (Game / Voice / Agent modules)
+- Non-blocking async voice perception (`listen_in_background`)
+- Background thread management
+- Clean startup and shutdown lifecycle handling
+- Prompt-controlled personality and response constraints
+
+This project demonstrates integration of AI systems into a real-time interactive environment.
 
 ---
 
 ## 🛠️ Tech Stack
+
 - Python
 - Pygame
-- langchain
-- Open-source LLM
+- LangChain
+- Ollama (Local LLM runtime)
+- SpeechRecognition
+- gTTS (Text-to-Speech)
+- Threading & Asynchronous Callbacks
 
 
 ---
