@@ -1,10 +1,19 @@
 # 🐍 LLM-Powered Snake Game (Pygame)
 
-An interactive Snake game built with **Python and Pygame**, enhanced with a locally running **LLM-powered voice agent**.
+An interactive Snake (named "Nada") game built with **Python and Pygame**, enhanced with a locally running **LLM-powered voice agent**.
 
 This project combines real-time game development with asynchronous AI integration, enabling a talking snake that reacts to in-game events and user voice commands in real time.
 
 ---
+
+## 🎮  Game Controls 
+
+- For movement use A,D,W,S keys
+- For sprinting use Space key
+- To call Nada, say "Hello"
+
+---
+
 
 ## 🎮 Core Game Features
 
